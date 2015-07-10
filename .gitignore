@@ -1,2 +1,5 @@
 /tmp/
+/logs/
 .DS_Store
+
+spec/examples.txt

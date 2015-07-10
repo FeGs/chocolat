@@ -10,3 +10,4 @@ group :development do
   gem 'rspec', '~> 3.3.0'
   gem 'guard-rspec', '~> 4.6.0', require: false
 end
+gem 'sinatra-jsonp', '~> 0.4.4'

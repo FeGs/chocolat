@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'lib/database/database'
 
-ADAPTERS = %w(mongo)
 DATABASE_NAME = 'test_database'
 
 ADAPTERS.each do |adapter|
