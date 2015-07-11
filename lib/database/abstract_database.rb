@@ -34,4 +34,7 @@ class AbstractCollection
 
   def insert(documents)
   end
+
+  def aggregate(*args, **kwargs)
+  end
 end

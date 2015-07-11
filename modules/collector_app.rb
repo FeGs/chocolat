@@ -6,7 +6,7 @@ require 'sinatra/jsonp'
 require 'sinatra/namespace'
 require_relative '../lib/database/database'
 
-class Collector < Sinatra::Base
+class CollectorApp < Sinatra::Base
   register Sinatra::Namespace
   helpers Sinatra::Jsonp
 
@@ -22,6 +22,7 @@ class Collector < Sinatra::Base
 
         if @data.nil?
           status 400
+          jsonp created: false, msg: 'missing parameter: data'
           return
         end
 
@@ -29,6 +30,7 @@ class Collector < Sinatra::Base
           CollectService.new(@project_id, @event_name).execute(@data)
           jsonp created: true
         rescue Exception => e
+          status 400
           jsonp created: false, msg: e.message
         end
       end

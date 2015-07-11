@@ -1,12 +1,10 @@
 require 'spec_helper'
 require 'lib/database/database'
 
-DATABASE_NAME = 'test_database'
-
 ADAPTERS.each do |adapter|
   describe "#{adapter}: Collection" do
     before(:each) do
-      @connection = Database.connection(adapter, database: DATABASE_NAME)
+      @connection = Database.connection(adapter, database: TEST_DATABASE_NAME)
       @database = @connection.database
     end
 
@@ -35,9 +33,9 @@ ADAPTERS.each do |adapter|
         collection = @database.collection('my_collection')
         collection.insert({ v: 1 })
 
-        expect(@connection.database_names).to include(DATABASE_NAME)
+        expect(@connection.database_names).to include(TEST_DATABASE_NAME)
         @database.drop
-        expect(@connection.database_names).not_to include(DATABASE_NAME)
+        expect(@connection.database_names).not_to include(TEST_DATABASE_NAME)
       end
     end
   end

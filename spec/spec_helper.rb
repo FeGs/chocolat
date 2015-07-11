@@ -11,6 +11,8 @@ Mongo::Logger.logger.level = ::Logger::FATAL
 
 API_PREFIX = '/api/v1'
 ADAPTERS = %w(mongo)
+TEST_DATABASE_NAME = 'test_database'
+PROJECT_ID = TEST_DATABASE_NAME
 
 RSpec.configure do |config|
   config.include IntegrationHelper

@@ -55,5 +55,9 @@ module MongoAdapter
         @underlying.insert_one(documents)
       end
     end
+
+    def aggregate(*args, **kwargs)
+      @underlying.find.aggregate(*args, **kwargs)
+    end
   end
 end

@@ -1,13 +1,10 @@
 require 'spec_helper'
 require 'lib/database/database'
 
-ADAPTERS = %w(mongo)
-DATABASE_NAME = 'test_database'
-
 ADAPTERS.each do |adapter|
   describe 'AbstractCollection' do
     before(:each) do
-      @connection = Database.connection(adapter, database: DATABASE_NAME)
+      @connection = Database.connection(adapter, database: TEST_DATABASE_NAME)
       @database = @connection.database
       @collection = @database.collection('test_collection')
     end
@@ -26,6 +23,10 @@ ADAPTERS.each do |adapter|
         result = @collection.insert([{ v: 2 }, { v: 5 }])
         expect(result.n).to eq(2)
       end
+    end
+
+    describe '#aggregate' do
+      skip
     end
   end
 end
