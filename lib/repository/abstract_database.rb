@@ -1,5 +1,7 @@
 module Repository
   class AbstractDatabase
+    attr_reader :underlying
+
     def initialize(underlying)
     end
 

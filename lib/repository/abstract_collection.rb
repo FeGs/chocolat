@@ -1,5 +1,7 @@
 module Repository
   class AbstractCollection
+    attr_reader :underlying
+
     def initialize(underlying)
     end
 

@@ -1,5 +1,7 @@
 module Repository
   class AbstractConnection
+    attr_reader :underlying
+
     def initialize
     end
 
