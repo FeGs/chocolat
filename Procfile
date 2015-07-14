@@ -1,1 +1,1 @@
-web: bundle exec ruby app.rb -s Trinidad -p $PORT
+web: bundle exec rails s -p $PORT

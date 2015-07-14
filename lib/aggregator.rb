@@ -1,5 +1,3 @@
-require_relative './database/database'
-
 class Aggregator
   def initialize(database, collection_name)
     @database = database

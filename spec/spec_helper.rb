@@ -1,22 +1,4 @@
-require 'mongo'
-require 'json'
-require 'rack/test'
-require 'rspec'
-require_relative './integration_helper'
-
-$:.unshift File.join(File.dirname(__FILE__), '..')
-
-# Suppress mongo log
-Mongo::Logger.logger.level = ::Logger::FATAL
-
-API_PREFIX = '/api/v1'
-ADAPTERS = %w(mongo)
-TEST_DATABASE_NAME = 'test_database'
-PROJECT_ID = TEST_DATABASE_NAME
-
 RSpec.configure do |config|
-  config.include IntegrationHelper
-
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
@@ -30,7 +12,7 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = "spec/examples.txt"
 
-  # config.warnings = true
+  config.disable_monkey_patching!
 
   if config.files_to_run.one?
     config.default_formatter = 'doc'

@@ -1,5 +1,9 @@
-/tmp/
-/logs/
 .DS_Store
-
 spec/examples.txt
+
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/
+!/log/.keep
+/tmp

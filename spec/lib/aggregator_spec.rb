@@ -1,21 +1,18 @@
-require 'spec_helper'
-require 'lib/aggregator'
+require 'rails_helper'
 
-describe Aggregator do
-  before :each do
-    @database = database
-    @collection = @database.collection('test_collection')
-  end
+RSpec.describe Aggregator do
+  let(:database) { Repository::Database.connection(database: 'test_database').database }
+  let!(:collection) { database.collection('test_collection') }
 
   after :each do
-    @database.drop
+    database.drop
   end
 
   describe '#count' do
     it 'counts all documents when no param is given' do
-      aggregator = Aggregator.new(@database, 'test_collection')
+      aggregator = Aggregator.new(database, 'test_collection')
       expect(aggregator.count).to eq(0)
-      @collection.insert({ v: 1 })
+      collection.insert({ v: 1 })
       expect(aggregator.count).to eq(1)
     end
   end
