@@ -37,6 +37,8 @@ module Services
     end
 
     class ResultError < Result
+      attr_accessor :error
+
       def initialize(error)
         @error = error
       end
