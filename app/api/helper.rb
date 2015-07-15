@@ -3,5 +3,10 @@ module Api
     def current_project
       params[:project_id]
     end
+
+    def decode_data(data)
+      decoded = Base64.decode64(data)
+      JSON.parse(data)
+    end
   end
 end
