@@ -6,12 +6,16 @@ module Repository
       @connection = connection
     end
 
+    def adapter_name
+      connection.adapter_name
+    end
+
     def collection_names
     end
 
-    def collection(name)
+    def [](name)
     end
 
-    alias_method :[], :collection
+    alias_method :collection, :[]
   end
 end

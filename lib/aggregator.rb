@@ -1,25 +1,19 @@
 class Aggregator
+  extend Forwardable
+
   def initialize(database, collection_name)
     @database = database
     @collection = @database.collection(collection_name)
   end
 
-  def count(**kwargs)
-    aggregated = @collection.aggregate([
-      {
-        '$group' => {
-          _id: nil,
-          count: { '$sum' => 1 }
-        }
-      }
-    ])
-
-    result = aggregated.first
-
-    if result.nil?
-      0
-    else
-      result['count']
+  def adapter
+    @adapter ||= begin
+      case @database.adapter_name
+      when 'mongo'
+        Aggregation::Adapter::Mongo::Aggregator.new(@database, @collection)
+      end
     end
   end
+
+  def_delegators :adapter, :count
 end
