@@ -13,9 +13,12 @@ module Repository
     def collection_names
     end
 
-    def [](name)
+    def collection(name)
     end
 
+    def [](name)
+      collection(name)
+    end
     alias_method :collection, :[]
   end
 end

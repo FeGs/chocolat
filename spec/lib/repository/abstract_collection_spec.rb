@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 ADAPTERS.each do |adapter|
-  RSpec.describe Repository::AbstractCollection do
+  RSpec.describe "#{adapter}: Collection" do
     let(:connection) { Repository::Database.connection(adapter, database: 'test_database') }
     let!(:database) { connection.database }
     let!(:collection) { database.collection('test_collection') }
