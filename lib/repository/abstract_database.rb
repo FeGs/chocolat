@@ -1,8 +1,9 @@
 module Repository
   class AbstractDatabase
-    attr_reader :underlying
+    attr_reader :underlying, :connection
 
-    def initialize(underlying)
+    def initialize(underlying, connection)
+      @connection = connection
     end
 
     def collection_names

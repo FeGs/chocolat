@@ -2,8 +2,9 @@ module Repository
   module Adapter
     module Mongo
       class Collection < Repository::AbstractCollection
-        def initialize(underlying)
-          @underlying ||= underlying
+        def initialize(underlying, database)
+          super
+          @underlying = underlying
         end
 
         def name

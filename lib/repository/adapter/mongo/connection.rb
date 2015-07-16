@@ -15,7 +15,7 @@ module Repository
         end
 
         def database
-          Adapter::Mongo::Database.new(@underlying.database)
+          Adapter::Mongo::Database.new(@underlying.database, self)
         end
       end
     end

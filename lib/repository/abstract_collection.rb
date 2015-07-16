@@ -1,8 +1,9 @@
 module Repository
   class AbstractCollection
-    attr_reader :underlying
+    attr_reader :underlying, :database
 
-    def initialize(underlying)
+    def initialize(underlying, database)
+      @database = database
     end
 
     def name
