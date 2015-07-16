@@ -10,18 +10,30 @@ module Aggregation
           aggregated = @collection.aggregate([
             {
               '$group' => {
-                _id: nil,
+                _id: group_by(kwargs),
                 count: { '$sum' => 1 }
               }
             }
           ])
 
-          result = aggregated.first
-
-          if result.nil?
-            0
+          if kwargs[:group_by]
+            aggregated.map do |document|
+              {
+                kwargs[:group_by] => document['_id'],
+                'result' => document['count']
+              }
+            end
           else
-            result['count']
+            result = aggregated.first
+            result.try(:[], 'count') || 0
+          end
+        end
+
+        def group_by(params)
+          if params[:group_by]
+            "$#{params[:group_by]}"
+          else
+            nil
           end
         end
       end
