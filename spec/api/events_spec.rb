@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe Api::Events, api: true do
   include ApiHelper
 
-  let(:project_id) { "chocolat" }
+  let(:project) { FactoryGirl.create(:project) }
+  let(:project_id) { project.id.to_s }
   let(:event_name) { "commits" }
   let(:data) { {a: 1, b: 2} }
 
   after :each do
-    clear_repository(project_id)
+    clear_repository(project)
   end
 
   describe 'GET|POST /projects/:project_id/events/:event_name' do

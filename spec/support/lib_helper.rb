@@ -1,10 +1,9 @@
 module LibHelper
-  def clear_repository(project_id)
-    Repository::Database.connection(database: project_id).database.drop
+  def clear_repository(project)
+    project.repository.drop
   end
 
-  def insert_documents(project_id, event_name, documents)
-    db = Repository::Database.connection(database: project_id).database
-    db[event_name].insert(documents)
+  def insert_documents(project, event_name, documents)
+    project.repository[event_name].insert(documents)
   end
 end

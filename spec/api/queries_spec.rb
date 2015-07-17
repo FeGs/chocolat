@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe Api::Queries, api: true do
   include ApiHelper
 
-  let(:project_id) { "chocolat" }
+  let(:project) { FactoryGirl.create(:project) }
+  let(:project_id) { project.id.to_s }
   let(:event_name) { "commits" }
   let(:data) {
     [
@@ -14,11 +15,11 @@ RSpec.describe Api::Queries, api: true do
   }
 
   before :each do
-    insert_documents(project_id, event_name, data)
+    insert_documents(project, event_name, data)
   end
 
   after :each do
-    clear_repository(project_id)
+    clear_repository(project)
   end
 
   describe 'GET|POST /projects/:project_id/queries/count' do

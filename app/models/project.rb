@@ -10,6 +10,10 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def repository
+    Repository::Database.connection(database: id).try(:database)
+  end
+
 private
   def generate_api_keys!
     ApiKey::SCOPES.each do |scope|

@@ -1,7 +1,7 @@
 module Api
   module Helper
     def current_project
-      params[:project_id]
+      Project.find(params[:project_id])
     end
 
     def decode_data(data)
