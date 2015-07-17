@@ -11,6 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150717071425) do
+
+  create_table "api_keys", force: :cascade do |t|
+    t.uuid     "project_id", limit: 16
+    t.string   "value",      limit: 255
+    t.integer  "scope"
+    t.boolean  "revoked",                default: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "projects", ["id"], name: "index_projects_on_id"
+  add_index "projects", ["id"], name: "sqlite_autoindex_projects_1", unique: true
 
 end
