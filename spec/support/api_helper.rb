@@ -3,6 +3,10 @@ module ApiHelper
     "/#{Api::EntryPoint.prefix}/#{Api::EntryPoint.version}#{path}?#{query.to_query}"
   end
 
+  def auth_header(key)
+    { 'Authorization' => key }
+  end
+
   def encode_data(data)
     Base64.encode64(data.to_json)
   end

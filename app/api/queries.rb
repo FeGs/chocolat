@@ -9,6 +9,8 @@ module Api
         requires :event_collection, type: String, desc: 'A name of event'
       end
       route ['GET', 'POST'], ':project_id/queries/count' do
+        require_read_key!
+
         result = Services::AggregateCount.new(params['project_id'], params['event_collection']).execute(params.to_h)
         if result.success?
           { result: result.value }
