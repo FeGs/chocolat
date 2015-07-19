@@ -1,19 +1,22 @@
 class Aggregator
   extend Forwardable
 
-  def initialize(database, collection_name)
-    @database = database
-    @collection = @database.collection(collection_name)
+  def initialize(project, event_name)
+    @project, @event_name = project, event_name
+  end
+
+  def repository
+    @project.repository
   end
 
   def adapter
     @adapter ||= begin
-      case @database.adapter_name
+      case repository.adapter_name
       when 'mongo'
-        Aggregation::Adapter::Mongo::Aggregator.new(@database, @collection)
+        Aggregation::Adapter::Mongo::Aggregator.new(@project, @event_name)
       end
     end
   end
 
-  def_delegators :adapter, :count
+  def_delegators :adapter, :count, :count_unique
 end

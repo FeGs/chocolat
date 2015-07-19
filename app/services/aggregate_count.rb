@@ -1,13 +1,11 @@
 module Services
   class AggregateCount < Base
-    def initialize(project_id, event_collection)
-      @project_id, @event_collection = project_id, event_collection
+    def initialize(project, event_name)
+      @project, @event_name = project, event_name
     end
 
     def execute(params = {})
-      params.symbolize_keys!
-      @database = Repository::Database.connection(database: @project_id).database
-      @aggregator = Aggregator.new(@database, @event_collection)
+      @aggregator = Aggregator.new(@project, @event_name)
       count = @aggregator.count(**params)
 
       success!(count)

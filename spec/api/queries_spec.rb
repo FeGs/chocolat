@@ -30,25 +30,13 @@ RSpec.describe Api::Queries, api: true do
     end
 
     it 'counts documents of given event collection' do
-      # GET
       get api("/projects/#{project_id}/queries/count", event_collection: event_name, api_key: read_key)
 
       expect(response).to have_http_status(:success)
       expect(json_response['result']).to eq 3
-
-      # event insertion
-      get api("/projects/#{project_id}/events/#{event_name}", data: encode_data({
-        author: 'angdev', changes: 4
-      }), api_key: project.write_key.value)
-      expect(response).to have_http_status(:success)
-
-      # POST
-      post api("/projects/#{project_id}/queries/count"), { event_collection: event_name }, auth_header(read_key)
-      expect(response).to have_http_status(:success)
-      expect(json_response['result']).to eq 4
     end
 
-    it 'counts documents grouped by target-property' do
+    it 'counts documents grouped by specified property' do
       post api("/projects/#{project_id}/queries/count"), {
         event_collection: event_name,
         group_by: 'author'
@@ -57,6 +45,49 @@ RSpec.describe Api::Queries, api: true do
       expect(response).to have_http_status(:success)
       expect(json_response['result']).to match_array([
         { 'author' => 'angdev', 'result' => 2 },
+        { 'author' => 'hello', 'result' => 1 }
+      ])
+    end
+  end
+
+  describe 'GET|POST /projects/:project_id/queries/count_unique' do
+    it 'requires read key' do
+      get api("/projects/#{project_id}/queries/count",
+        event_collection: event_name,
+        target_property: 'author',
+        api_key: project.write_key.value)
+
+      expect(response).to have_http_status(401)
+    end
+
+    it 'requires a target property' do
+      get api("/projects/#{project_id}/queries/count_unique",
+        event_collection: event_name,
+        api_key: read_key)
+
+      expect(response).to have_http_status(400)
+    end
+
+    it 'counts unique documents for a target property' do
+      get api("/projects/#{project_id}/queries/count_unique",
+        event_collection: event_name,
+        target_property: 'author',
+        api_key: read_key)
+
+      expect(response).to have_http_status(:success)
+      expect(json_response['result']).to eq 2
+    end
+
+    it 'counts unique documents grouped by specified property' do
+      post api("/projects/#{project_id}/queries/count_unique"), {
+        event_collection: event_name,
+        target_property: 'author',
+        group_by: 'author'
+      }, auth_header(read_key)
+
+      expect(response).to have_http_status(:success)
+      expect(json_response['result']).to match_array([
+        { 'author' => 'angdev', 'result' => 1 },
         { 'author' => 'hello', 'result' => 1 }
       ])
     end

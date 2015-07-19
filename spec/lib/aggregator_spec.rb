@@ -7,9 +7,9 @@ RSpec.describe Aggregator do
   let(:event_name) { "commits" }
   let(:data) {
     [
-      { author: 'angdev', changes: 2 },
-      { author: 'angdev', changes: 3 },
-      { author: 'hello', changes: 4 }
+      { author: 'angdev', changes: 2, organization: 'chocolat' },
+      { author: 'angdev', changes: 3, organization: 'chocolat' },
+      { author: 'hello', changes: 4, organization: 'chocolat' }
     ]
   }
 
@@ -23,18 +23,34 @@ RSpec.describe Aggregator do
 
   describe '#count' do
     it 'counts all documents when no param is given' do
-      aggregator = Aggregator.new(project.repository, event_name)
+      aggregator = Aggregator.new(project, event_name)
       expect(aggregator.count).to eq(3)
-      project.repository[event_name].insert({ author: 'hello', changes: 5 })
+      insert_documents(project, event_name, { author: 'hello', changes: 5 })
       expect(aggregator.count).to eq(4)
     end
 
-    it 'counts documents group by target property' do
-      aggregator = Aggregator.new(project.repository, event_name)
+    it 'counts documents group by specified property' do
+      aggregator = Aggregator.new(project, event_name)
       result = aggregator.count(group_by: 'author')
       expect(result).to match_array([
         { 'author' => 'angdev', 'result' => 2 },
         { 'author' => 'hello', 'result' => 1 }
+      ])
+    end
+  end
+
+  describe '#count_unique' do
+    it 'counts unique documents for a target property' do
+      aggregator = Aggregator.new(project, event_name)
+      result = aggregator.count_unique('author')
+      expect(result).to eq(2)
+    end
+
+    it 'counts unique documents group by specified property' do
+      aggregator = Aggregator.new(project, event_name)
+      result = aggregator.count_unique('author', group_by: 'organization')
+      expect(result).to match_array([
+        { 'organization' => 'chocolat', 'result' => 2 }
       ])
     end
   end

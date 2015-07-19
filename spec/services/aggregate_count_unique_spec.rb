@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Services::AggregateCount do
+RSpec.describe Services::AggregateCountUnique do
   include LibHelper
 
   let(:project) { FactoryGirl.create(:project) }
@@ -25,15 +25,15 @@ RSpec.describe Services::AggregateCount do
   end
 
   it 'forwards result from aggregation library' do
-    result = Services::AggregateCount.new(project, event_name).execute
+    result = Services::AggregateCountUnique.new(project, event_name, 'author').execute
     expect(result.success?).to be true
-    expect(result.value).to eq(3)
+    expect(result.value).to eq(2)
 
-    result = Services::AggregateCount.new(project, event_name).execute(group_by: 'author')
+    result = Services::AggregateCountUnique.new(project, event_name, 'author').execute(group_by: 'author')
     expect(result.success?).to be true
     expect(result.value).to match_array([
-      { 'author' => 'angdev', 'result' => 2 },
-      { 'author' => 'hello', 'result' => 1}
+      { 'author' => 'angdev', 'result' => 1 },
+      { 'author' => 'hello', 'result' => 1 }
     ])
   end
 end
