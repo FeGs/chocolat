@@ -7,9 +7,9 @@ RSpec.describe Aggregator do
   let(:event_name) { "commits" }
   let(:data) {
     [
-      { author: 'angdev', changes: 2, organization: 'chocolat' },
-      { author: 'angdev', changes: 3, organization: 'chocolat' },
-      { author: 'hello', changes: 4, organization: 'chocolat' }
+      { author: 'angdev', changes: 2, organization: 'chocolat', repository: { name: 'chocolat' } },
+      { author: 'angdev', changes: 3, organization: 'chocolat', repository: { name: 'chocolat-test' } },
+      { author: 'hello', changes: 4, organization: 'chocolat', repository: { name: 'chocolat' } }
     ]
   }
 
@@ -51,6 +51,18 @@ RSpec.describe Aggregator do
       result = aggregator.count_unique('author', group_by: 'organization')
       expect(result).to match_array([
         { 'organization' => 'chocolat', 'result' => 2 }
+      ])
+    end
+
+    it 'counts unique documents for a nested target property' do
+      aggregator = Aggregator.new(project, event_name)
+      result = aggregator.count_unique('repository.name')
+      expect(result).to eq(2)
+
+      result = aggregator.count_unique('repository.name', group_by: 'author')
+      expect(result).to match_array([
+        { 'author' => 'angdev', 'result' => 2, },
+        { 'author' => 'hello', 'result' => 1 }
       ])
     end
   end

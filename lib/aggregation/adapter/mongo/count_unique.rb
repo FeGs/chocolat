@@ -37,11 +37,15 @@ module Aggregation
             stage1['$group'] = {}
             stage1['$group']['_id'] = {}
             stage1['$group']['_id'][target_property] = to_variable(target_property)
-            stage1['$group']['_id'][params[:group_by]] = to_variable(params[:group_by]) if params[:group_by]
+            stage1['$group']['_id']['group_by'] = to_variable(params[:group_by]) if params[:group_by]
 
             stage2 = {}
             stage2['$group'] = {}
-            stage2['$group']['_id'] = to_variable('_id', params[:group_by])
+            if params[:group_by]
+              stage2['$group']['_id'] = to_variable('_id', 'group_by')
+            else
+              stage2['$group']['_id'] = nil
+            end
             stage2['$group']['count'] = { '$sum' => 1 }
 
             [stage1, stage2]
